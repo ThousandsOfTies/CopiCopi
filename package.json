@@ -1,0 +1,15 @@
+{
+  "name": "copicopi-meta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CopiCopi meta-repository for integrated build and deployment",
+  "scripts": {
+    "build:drawing-common": "cd repos/drawing-common && npm install && npm run build",
+    "build": "make build",
+    "dev": "cd repos/copicopi-app && npm run dev",
+    "dev:server": "cd repos/copicopi-app && npm run dev:server"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
