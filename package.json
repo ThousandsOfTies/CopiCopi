@@ -6,8 +6,7 @@
   "scripts": {
     "build:drawing-common": "cd repos/drawing-common && npm install && npm run build",
     "build": "make build",
-    "dev": "cd repos/copicopi-app && npm run dev",
-    "dev:server": "cd repos/copicopi-app && npm run dev:server"
+    "dev": "cd repos/copicopi-app && npm run dev"
   },
   "engines": {
     "node": ">=18.0.0"
