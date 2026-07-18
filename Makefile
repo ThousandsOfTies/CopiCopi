@@ -1,7 +1,7 @@
 # CopiCopi project Makefile
 # Dependencies are pinned as Git submodules in .gitmodules.
 
-.PHONY: help setup init update install build-repos build clean status test dev
+.PHONY: help setup init update install build-repos build clean status test dev dev-server
 
 REPOS_DIR := repos
 DRAWING_COMMON := $(REPOS_DIR)/drawing-common
@@ -32,6 +32,7 @@ install: init
 	@cd $(DRAWING_COMMON) && npm install
 	@cd $(HOME_TEACHER_COMMON) && npm install
 	@cd $(COPICOPI_APP) && npm install
+	@cd $(COPICOPI_APP)/server && npm install
 
 ## build-repos: Build shared libraries
 build-repos: init
@@ -39,11 +40,16 @@ build-repos: init
 
 ## build: Build shared libraries and the CopiCopi application
 build: build-repos
+	@cd $(COPICOPI_APP)/server && npm run build
 	@cd $(COPICOPI_APP) && npm run build
 
 ## dev: Start the CopiCopi Vite development server
 dev: init
 	@cd $(COPICOPI_APP) && npm run dev
+
+## dev-server: Start the CopiCopi API server on port 3003
+dev-server: init
+	@cd $(COPICOPI_APP)/server && npm run dev
 
 ## clean: Remove generated build output while keeping submodules
 clean:

@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_APP_NAME: CopiCopi
+      VITE_API_URL: ${{ vars.COPICOPI_API_URL }}
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v4
