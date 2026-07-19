@@ -21,6 +21,12 @@ jobs:
     env:
       VITE_APP_NAME: CopiCopi
       VITE_API_URL: ${{ vars.COPICOPI_API_URL }}
+      VITE_FIREBASE_API_KEY: ${{ vars.COPICOPI_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.COPICOPI_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars.COPICOPI_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.COPICOPI_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.COPICOPI_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ vars.COPICOPI_FIREBASE_APP_ID }}
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v4
