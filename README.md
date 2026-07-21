@@ -149,7 +149,7 @@ GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエン
 - PDF.js
 - Canvas API / drawing-common
 - IndexedDB
-- Google Gemini 3.5 Flash
+- Google Gemini 3.6 Flash
 - Express
 - Google Cloud Run / Secret Manager
 - GitHub Actions / GitHub Pages
