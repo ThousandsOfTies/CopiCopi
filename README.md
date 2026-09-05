@@ -37,7 +37,7 @@ CopiCopiは、PDFや画像のお手本をA面に表示し、B面へ模写して�
 
 Teacher Settingsでは、利用可能な先生のON/OFFとデフォルト先生を設定できます。未解放の先生も選択メニューに薄く表示され、利用できるフィードバックスタイルを確認できます。
 
-> Premiumの画面とロック制御は実装済みですが、Stripeによる正式課金はiPadでの動作確認後に有効化する予定です。
+> Premiumの画面・ロック制御に加えて、Stripe Checkout・Portal・WebhookのAPIも実装されています。課金テストと独立環境への移行記録は [HANDOVER.md](HANDOVER.md) にあります。テスト決済の完了状況と本番モードの有効化は別途確認が必要です。
 
 ### Progress
 
@@ -81,7 +81,14 @@ CopiCopi/
 
 独立した`VERSIONS`ファイルは使用せず、メタリポジトリのgitlinkで各submoduleのコミットを管理します。
 
+IndexedDB名は `CopiCopiDB` です。共通ライブラリの既定値 `TutoTutoDB` をVite設定で上書きし、同一オリジンにあるTutoTuto/DoriDoriの教材・設定・履歴と分離しています。URLパスだけではIndexedDBは分離されません。
+
+APIとFirebaseもCopiCopi専用です。現在の課金情報は専用Firebaseの `users/{uid}` 直下に保存され、旧 `entitlements.copicopi` は使いません。TutoTutoのFirebase設定を流用しないでください。
+
 ## 🚀 ローカル開発
+
+CIはNode.js 20とnpmを使用します。MakefileにはGNU MakeとUnix系シェルが必要です。
+PowerShellで `npm.ps1` が実行ポリシーにより拒否される場合は `npm.cmd` を使用します。
 
 ### 初回セットアップ
 
@@ -140,7 +147,7 @@ Express APIはGoogle Cloud Runで稼働しています。
 - URL：<https://copicopi-api-958638932518.asia-northeast1.run.app>
 - Gemini APIキー：Google Secret Managerで管理
 
-GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエンドのAPI接続先として使用されます。
+GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエンドのAPI接続先として使用されます。末尾に `/api` を付けないベースURLを指定します。Firebaseのビルド設定には `COPICOPI_FIREBASE_*` Repository variablesを使用します。
 
 ## 🔧 技術スタック
 
@@ -149,7 +156,7 @@ GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエン
 - PDF.js
 - Canvas API / drawing-common
 - IndexedDB
-- Google Gemini 3.6 Flash
+- Google Gemini 3.8 Flash
 - Express
 - Google Cloud Run / Secret Manager
 - GitHub Actions / GitHub Pages
@@ -162,6 +169,9 @@ GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエン
 cd repos/copicopi-app
 git checkout main
 git pull --ff-only
+# 修正・検証後、変更ファイルを選んでgit addする
+git commit -m "Describe the app change"
+git push origin main
 
 cd ../..
 git add repos/copicopi-app
@@ -170,6 +180,8 @@ git push
 ```
 
 `make update`は各submoduleを`.gitmodules`で指定したブランチの最新コミットへ移動します。内容を確認してからgitlinkをコミットしてください。
+
+`make init` はメタに固定されたコミットを復元します。`make build` 等も `init` に依存するため、gitlink更新前の新しいコミットはサブリポジトリ内で直接ビルドして検証してください。
 
 ## 🆘 Issues
 

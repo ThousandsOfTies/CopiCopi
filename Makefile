@@ -16,7 +16,7 @@ help:
 	@echo "CopiCopi project"
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /'
 
-## setup: Initialize submodules, install dependencies, and build
+## setup: Initialize submodules, install dependencies, and build shared libraries
 setup: init install build-repos
 
 ## init: Initialize the submodules pinned by this repository
