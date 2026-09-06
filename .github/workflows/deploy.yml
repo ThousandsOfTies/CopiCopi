@@ -51,6 +51,9 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Verify deferred assets and offline cache
+        run: npm --prefix repos/copicopi-app run test:bundle
+
       - name: Prepare Pages artifact
         run: |
           mkdir -p deploy
