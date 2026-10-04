@@ -81,7 +81,7 @@ CopiCopi/
 
 独立した`VERSIONS`ファイルは使用せず、メタリポジトリのgitlinkで各submoduleのコミットを管理します。
 
-IndexedDB名は `CopiCopiDB` です。共通ライブラリの既定値 `TutoTutoDB` をVite設定で上書きし、同一オリジンにあるTutoTuto/DoriDoriの教材・設定・履歴と分離しています。URLパスだけではIndexedDBは分離されません。
+IndexedDB名は `CopiCopiDB` です。Vite設定で `VITE_INDEXED_DB_NAME` を明示し、同一オリジンにあるTutoTuto/DoriDoriの教材・設定・履歴と分離しています。共通ライブラリに既定DB名はなく、未指定・空白のみの場合は起動時に例外になります。URLパスだけではIndexedDBは分離されません。
 
 APIとFirebaseもCopiCopi専用です。現在の課金情報は専用Firebaseの `users/{uid}` 直下に保存され、旧 `entitlements.copicopi` は使いません。TutoTutoのFirebase設定を流用しないでください。
 

@@ -60,7 +60,7 @@ git status --short --branch
 - `@thousands-of-ties/drawing-common` → `../drawing-common/src`
 
 マシン固有の絶対パスをエイリアスに追加しない。
-IndexedDB名は `CopiCopiDB`。共通ライブラリの既定値 `TutoTutoDB` に戻さない。
+IndexedDB名は `CopiCopiDB`。Vite設定で `VITE_INDEXED_DB_NAME` を明示する。共通ライブラリに既定DB名はなく、未指定・空白のみは例外になる。
 IndexedDBはURLパスでは分離されないため、DB名やスキーマを変更する場合は既存データの移行・互換性を検討する。
 
 CopiCopiはAPI・Firebaseも独立した構成。TutoTutoの認証・課金設定を流用しない。

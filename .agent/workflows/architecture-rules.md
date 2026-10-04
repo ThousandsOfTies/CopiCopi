@@ -27,7 +27,8 @@ API実装は `repos/copicopi-app/server/src/index.ts`。
 
 ## 保存・互換性
 
-IndexedDB名は `CopiCopiDB`。共通ライブラリの既定値 `TutoTutoDB` を各アプリのVite設定で指定・上書きする。
+IndexedDB名は `CopiCopiDB`。各アプリのVite設定で `VITE_INDEXED_DB_NAME` を明示する。
+共通ライブラリに既定DB名はなく、未指定・空白のみの場合は例外になる。
 DBは同一オリジン内でURLパスごとには分かれないため、派生アプリのDB名を統一しない。
 DB名・スキーマ変更は既存データの移行と後方互換性を確認する。
 
