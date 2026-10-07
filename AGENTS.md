@@ -75,3 +75,10 @@ CopiCopiはAPI・Firebaseも独立した構成。TutoTutoの認証・課金設�
 - ログは起動ターミナルへ出力される。固定の `/tmp/proto-server.log` は作成されない。
 - メタの `main` へのpushでGitHub Actionsが固定済みサブモジュールをビルドし、GitHub Pagesへ公開する。
 - Cloud Run APIはフロントと別デプロイ。READMEと `HANDOVER.md` を参照する。
+
+## 表示文言と翻訳
+
+- 共通UIの文言は `repos/home-teacher-common/src/i18n/locales/{ja,en}.json`、CopiCopi固有の文言は `repos/copicopi-app/src/i18n/locales/{ja,en}.json` に置く。アプリ専用文言は `copicopi` 名前空間を使う。
+- 固定の表示文言・操作案内・アクセシビリティ用ラベルを画面に直書きしない。両言語でキーと差し込み項目を揃える。
+- 単独HTMLの翻訳もアプリのJSONから公開時にコピーする。`public/locales` に重複した辞書を追加しない。
+- 文言の変更はアプリで `npm run test:i18n`、ビルド後に `npm run test:bundle` で確認する。保存済みの本文・絵・ユーザー入力・AI回答を言語切り替えで書き換えない。
