@@ -1,96 +1,35 @@
 # CopiCopi
 
-**見本を見ながら描き、AIの先生と一緒に振り返るイラスト練習アプリ**
+PDFや画像のお手本を見ながら模写し、AIの先生と上達を振り返るイラスト練習アプリです。
 
-CopiCopiは、PDFや画像のお手本をA面に表示し、B面へ模写していくブラウザベースの練習環境です。完成したA/B画面をGoogle Geminiへ送り、ピクセル単位の一致ではなく、シルエット・比率・ポーズ・雰囲気を中心にフィードバックします。
+[CopiCopiを開く](https://thousandsofties.github.io/CopiCopi/)
 
-## 🎨 Launch
+## 主な機能
 
-### **[CopiCopiをひらく →](https://thousandsofties.github.io/CopiCopi/)**
+- お手本のA面と描画用のB面を切り替え・左右分割して表示。
+- ペン・筆・消しゴム・文字入力・レイヤー・Undoで描画。
+- A/Bの画面をAIへ送り、形・比率・雰囲気などのフィードバックを取得。
+- 先生の選択と、作品・評価を保存するProgress。
+- Googleログイン、Premiumの課金連携、日本語・英語表示。
 
-インストール不要で、PC・iPadなどのブラウザから利用できます。データは基本的に端末内のIndexedDBへ保存されます。
+PDFや作品は主に端末内のIndexedDB `CopiCopiDB` に保存します。AI評価にはネットワーク接続が必要です。
 
-## ✨ 主な機能
+## 構成
 
-### A/B左右表示の模写キャンバス
+このメタリポジトリが、Gitサブモジュールの使用コミットとビルド・公開を管理します。
 
-- A面にPDFのお手本、B面に描画キャンバスを表示
-- A面とB面を個別にズーム・パン
-- 現在見えているA/B画面をそのまま採点用画像としてキャプチャー
-- お手本ページ内の別作例や説明文を評価対象にしないようAIへ指示
-
-### 描画ツール
-
-- えんぴつ・マーカー・筆
-- くっきり（不透明）・水彩（半透明）
-- マウスやペンの移動速度に応じて太さが変化する筆
-- 消しゴム・Undo・全消去・テキスト入力
-- 初期色は黒。選択中の描き味と透明度をツールバーアイコンへ反映
-
-### AI先生による振り返り
-
-| 先生 | 方針 | 利用状態 |
-|---|---|---|
-| KIND | よかった点を先に伝え、改善点を絞る | 常時利用可能 |
-| BALANCED | よい点と改善点をバランスよく伝える | Premium向け |
-| HARD | 形・比率・重心まで細かく確認する | Premium向け |
-
-Teacher Settingsでは、利用可能な先生のON/OFFとデフォルト先生を設定できます。未解放の先生も選択メニューに薄く表示され、利用できるフィードバックスタイルを確認できます。
-
-> Premiumの画面・ロック制御に加えて、Stripe Checkout・Portal・WebhookのAPIも実装されています。課金テストと独立環境への移行記録は [HANDOVER.md](HANDOVER.md) にあります。テスト決済の完了状況と本番モードの有効化は別途確認が必要です。
-
-### Progress
-
-採点結果を単なるログではなく、上達を振り返るポートフォリオとして保存します。
-
-- 採点時のA/Bキャプチャー
-- 練習日時・PDF名・挑戦回数
-- 先生レベル・5段階評価
-- よかったところ
-- 次に直すポイント
-- 次の一枚へのアドバイス
-
-## 🖌️ 基本的な使い方
-
-1. Admin画面からPDFまたは画像を取り込む
-2. Enjoy画面で練習するページを開く
-3. A面のお手本を見ながらB面へ描く
-4. A/B面の位置と大きさを、比較したい状態へ調整する
-5. 先生ボタンを押してフィードバックを受ける
-6. Progressで過去の作品と改善点を振り返る
-
-## 📦 リポジトリ構成
-
-このリポジトリは、CopiCopiの統合・ビルド・デプロイを管理するメタリポジトリです。依存リポジトリはGit submoduleとして、使用するコミットを固定しています。
-
-```text
-CopiCopi/
-├── .github/workflows/      # GitHub Pages自動デプロイ
-├── Makefile                # 統合ビルド・開発コマンド
-└── repos/
-    ├── drawing-common/     # 描画共通ライブラリ
-    ├── home-teacher-common/ # 共通UI・IndexedDB・認証
-    └── copicopi-app/       # CopiCopi本体・APIサーバー
-```
-
-| リポジトリ | 説明 |
+| 場所 | 役割 |
 |---|---|
-| [drawing-common](https://github.com/ThousandsOfTies/drawing-common) | Canvas描画の共通処理 |
-| [home-teacher-common](https://github.com/ThousandsOfTies/home-teacher-common) | PDF・Admin・Progressなどの共通UI |
-| [copicopi-app](https://github.com/ThousandsOfTies/copicopi-app) | CopiCopiフロントエンドとExpress API |
+| `repos/copicopi-app` | CopiCopiのフロントエンド |
+| `repos/copicopi-app/server` | CopiCopi専用のExpress API |
+| `repos/home-teacher-common` | 共通UI・PDF表示・保存・認証 |
+| `repos/drawing-common` | 描画基盤 |
 
-独立した`VERSIONS`ファイルは使用せず、メタリポジトリのgitlinkで各submoduleのコミットを管理します。
+API・Firebase・課金設定はCopiCopi専用です。TutoTuto・DoriDoriの共有APIとは別に管理します。
 
-IndexedDB名は `CopiCopiDB` です。Vite設定で `VITE_INDEXED_DB_NAME` を明示し、同一オリジンにあるTutoTuto/DoriDoriの教材・設定・履歴と分離しています。共通ライブラリに既定DB名はなく、未指定・空白のみの場合は起動時に例外になります。URLパスだけではIndexedDBは分離されません。
+## ローカル開発
 
-APIとFirebaseもCopiCopi専用です。現在の課金情報は専用Firebaseの `users/{uid}` 直下に保存され、旧 `entitlements.copicopi` は使いません。TutoTutoのFirebase設定を流用しないでください。
-
-## 🚀 ローカル開発
-
-CIはNode.js 20とnpmを使用します。MakefileにはGNU MakeとUnix系シェルが必要です。
-PowerShellで `npm.ps1` が実行ポリシーにより拒否される場合は `npm.cmd` を使用します。
-
-### 初回セットアップ
+Node.js 20（CIと同じ）、npm、Gitを使用します。Makeの利用にはGNU MakeとUnix系シェルが必要です。
 
 ```bash
 git clone --recurse-submodules https://github.com/ThousandsOfTies/CopiCopi.git
@@ -98,101 +37,26 @@ cd CopiCopi
 make setup
 ```
 
-既存のチェックアウトでsubmoduleを初期化する場合：
+[フロントの設定例](https://github.com/ThousandsOfTies/copicopi-app/blob/main/.env.example) を参考に `repos/copicopi-app/.env.local`、[APIの設定例](https://github.com/ThousandsOfTies/copicopi-app/blob/main/server/.env.example) を参考に `repos/copicopi-app/server/.env` を用意します。
+フロントの `VITE_API_URL` は `http://localhost:3003` のようなベースURLとし、末尾に `/api` を付けません。APIキーはサーバー側に設定します。
+
+別々のターミナルで起動します。
 
 ```bash
-git submodule update --init --recursive
+make dev         # フロント: http://localhost:3000
+make dev-server  # API: http://localhost:3003
 ```
 
-### 開発サーバー
+Makeなしの場合は、描画・共通UI・アプリ・アプリ内の `server` で `npm install`、描画で `npm run build` を実行します。
+以降はアプリ内の `npm run dev` / `npm run dev:server` で起動できます。PowerShellで `npm.ps1` が拒否される場合は `npm.cmd` を使用します。
 
-ターミナルを2つ使用します。
+`make build` でフロントとAPIをビルドします。アプリ内では `npm run typecheck` と `npm test`、ビルド後は `npm run test:bundle` で確認できます。
 
-```bash
-# フロントエンド（http://localhost:3000）
-make dev
+## 更新・公開
 
-# CopiCopi API（http://localhost:3003）
-make dev-server
-```
+サブリポジトリを先にcommit・pushし、その後このリポジトリのgitlinkを更新します。手順と翻訳ルールは [AGENTS.md](AGENTS.md) を参照してください。
+`make init` は固定コミットを復元し、`make update` は追従ブランチへ進めます。gitlink更新前の検証は各サブリポジトリで直接行います。
 
-APIサーバーの環境変数は`repos/copicopi-app/server/.env.example`、Firebaseを含むフロント設定は`repos/copicopi-app/.env.example`を参照してください。秘密情報をGitへコミットしないでください。
-
-### よく使うコマンド
-
-```bash
-make setup      # submodule初期化・依存関係インストール・共通ライブラリビルド
-make install    # 全リポジトリの依存関係をインストール
-make build      # フロントエンドとAPIをビルド
-make status     # メタ・全submoduleのGit状態を表示
-make test       # 利用可能なテストを実行
-make clean      # ビルド成果物を削除
-```
-
-## ☁️ デプロイ
-
-### フロントエンド
-
-`main`ブランチへpushすると、GitHub Actionsがsubmoduleを含めてビルドし、GitHub Pagesへ自動デプロイします。
-
-- 公開先：<https://thousandsofties.github.io/CopiCopi/>
-- Workflow：`.github/workflows/deploy.yml`
-
-### APIサーバー
-
-Express APIはGoogle Cloud Runで稼働しています。
-
-- リージョン：`asia-northeast1`
-- サービス：`copicopi-api`
-- URL：<https://copicopi-api-958638932518.asia-northeast1.run.app>
-- Gemini APIキー：Google Secret Managerで管理
-
-GitHub ActionsのRepository variable `COPICOPI_API_URL` が、フロントエンドのAPI接続先として使用されます。末尾に `/api` を付けないベースURLを指定します。Firebaseのビルド設定には `COPICOPI_FIREBASE_*` Repository variablesを使用します。
-
-## 🔧 技術スタック
-
-- React 18 + TypeScript
-- Vite / vite-plugin-pwa
-- PDF.js
-- Canvas API / drawing-common
-- IndexedDB
-- Google Gemini 3.8 Flash
-- Express
-- Google Cloud Run / Secret Manager
-- GitHub Actions / GitHub Pages
-
-## 🔄 submoduleの更新
-
-変更したsubmodule側を先にコミット・pushし、その後メタリポジトリでgitlinkを更新します。
-
-```bash
-cd repos/copicopi-app
-git checkout main
-git pull --ff-only
-# 修正・検証後、変更ファイルを選んでgit addする
-git commit -m "Describe the app change"
-git push origin main
-
-cd ../..
-git add repos/copicopi-app
-git commit -m "Update CopiCopi app"
-git push
-```
-
-`make update`は各submoduleを`.gitmodules`で指定したブランチの最新コミットへ移動します。内容を確認してからgitlinkをコミットしてください。
-
-`make init` はメタに固定されたコミットを復元します。`make build` 等も `init` に依存するため、gitlink更新前の新しいコミットはサブリポジトリ内で直接ビルドして検証してください。
-
-## 🆘 Issues
-
-- [CopiCopi全体・デプロイ](https://github.com/ThousandsOfTies/CopiCopi/issues)
-- [CopiCopiアプリ](https://github.com/ThousandsOfTies/copicopi-app/issues)
-- [描画共通ライブラリ](https://github.com/ThousandsOfTies/drawing-common/issues)
-
-## 日本語・英語の表示
-
-言語は画面の言語メニューで切り替えます。共通UIの文言は `repos/home-teacher-common/src/i18n/locales/ja.json` と `en.json`、CopiCopi固有の文言は `repos/copicopi-app/src/i18n/locales/ja.json` と `en.json` で管理します。
-
-画面に固定文言を直書きせず、両言語に同じキー・差し込み項目を追加してください。ユーザーが入力した内容やAI回答そのものは翻訳対象に含めません。単独HTMLページもアプリの翻訳ファイルを使用し、公開時に自動コピーします。`public/locales` に別の翻訳を作成しないでください。
-
-アプリ内で `npm run test:i18n` を実行すると、翻訳キー・差し込み項目の一致と直書きを検査します。ビルド後の `npm run test:bundle` は、単独ページの翻訳が最新版で、オフライン用キャッシュにも含まれることを確認します。
+このリポジトリの `main` へのpushでGitHub Pagesへ公開します。Cloud Run APIは別途公開します。
+接続先はRepository variable `COPICOPI_API_URL`、Firebase設定は `COPICOPI_FIREBASE_*` で指定します。
+詳しくは [デプロイガイド](.agent/workflows/deployment.md)、課金・独立化の作業履歴は [HANDOVER.md](HANDOVER.md) を参照してください。
