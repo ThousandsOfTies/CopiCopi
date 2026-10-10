@@ -41,6 +41,9 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Verify API target
+        run: test -n "$VITE_API_URL"
+
       - name: Check types and unused code
         run: npm --prefix repos/copicopi-app run typecheck
 
