@@ -29,11 +29,15 @@ CopiCopi専用のExpress APIは `repos/copicopi-app/server` にある。
 ```bash
 cd repos/copicopi-app/server
 npm run build
-gcloud run deploy copicopi-api --source . --project gen-lang-client-0809048670 --region asia-northeast1
+npm run deploy
 ```
 
 環境変数・Secret Manager・サービスアカウントの要件は [API README](../../repos/copicopi-app/server/README.md) を参照。
+Google Cloud CLI 587.0.0以降を使用し、アプリの変更をcommit・pushしてから実行する。
+`server/cloudbuild.yaml` の `workerRelease: regular` でビルドし、成功したイメージのSHA256ダイジェストを既存サービスへ公開する。
+Docker BuildKitが対応しない `docker build --network cloudbuild` を生成する `gcloud run deploy --source` は使わない。
 上のコマンドは既存サービスの構成を使うコード更新用。新規環境では認証・CORS・シークレットを設定する。
+Cloud Runを変更せずにビルドだけ確認するには `npm run deploy -- --build-only` を使う。
 ヘルスチェックは `GET /health`。
 専用Firebaseの `users/{uid}` に課金情報を保存する。旧 `entitlements.copicopi` 方式ではない。
 [HANDOVER.md](../../HANDOVER.md) は作業時点の履歴であり、課金のテスト完了・本番有効化状態は別途確認する。
