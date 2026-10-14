@@ -64,3 +64,4 @@ status:
 ## test: Run test scripts where provided
 test: init
 	@for repo in $(SUBMODULES); do if npm -s --prefix $$repo run | grep -q 'test'; then npm --prefix $$repo test; fi; done
+	@cd $(COPICOPI_APP)/server && npm test

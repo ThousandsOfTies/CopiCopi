@@ -40,5 +40,8 @@ PDFs/
 # Submodules are tracked by Git; do not ignore repos/ entries here.
 
 # Local AI-agent worktrees and machine-specific settings
-.claude/worktrees/
-.claude/settings.local.json
+/.claude/worktrees/
+/.claude/settings.local.json
+
+# One-off source replacement script
+/replace_drawbatch.ps1

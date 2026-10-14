@@ -52,6 +52,7 @@ jobs:
           npm --prefix repos/drawing-common test
           npm --prefix repos/home-teacher-common test
           npm --prefix repos/copicopi-app test
+          npm --prefix repos/copicopi-app/server test
 
       - name: Build application
         run: make build
